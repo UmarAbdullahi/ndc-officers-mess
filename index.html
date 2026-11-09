@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NDC Officers Mess Abuja - Menu</title>
-  <link rel="icon" type="image/x-icon" href="https://ndc.gov.ng/wp-content/uploads/2020/03/Webp.net-resizeimage.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -19,7 +18,7 @@
   <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
     <div class="max-w-md mx-auto px-4 pt-4 pb-3 text-center">
       <h1 class="text-xl font-bold tracking-tight text-gray-900 uppercase">National Defence College</h1>
-      <p class="text-xs font-medium text-emerald-700 tracking-wider uppercase mt-0.5">Officers Mess Abuja • Digital Menu</p>
+      <p class="text-xs font-semibold text-emerald-800 tracking-wider uppercase mt-0.5">Officers Mess Abuja • Digital Menu</p>
       
       <!-- Top Section Toggle (Food vs Drinks) -->
       <div class="flex bg-gray-100 p-1 rounded-xl mt-3 border border-gray-200">
@@ -28,14 +27,14 @@
           onclick="setSection('Food')" 
           class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-emerald-800 text-white shadow-sm"
         >
-          🍲 Food Menu
+          🍲 Food & Kitchens
         </button>
         <button 
           id="btnDrinks" 
           onclick="setSection('Drinks')" 
           class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-gray-600 hover:text-gray-900"
         >
-          🍹 Drinks Menu
+          🍹 Bar & Drinks
         </button>
       </div>
 
@@ -44,7 +43,7 @@
         <input 
           type="text" 
           id="searchInput" 
-          placeholder="Search menu or vendor..." 
+          placeholder="Search food, drinks, or vendors..." 
           class="w-full bg-gray-100 text-sm text-gray-800 placeholder-gray-400 rounded-xl pl-10 pr-4 py-2.5 outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition"
         >
         <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +62,7 @@
   <main class="max-w-md mx-auto px-4 pt-4">
     <!-- Item Count & Active Status -->
     <div class="flex justify-between items-center mb-3 text-xs text-gray-500 font-medium px-1">
-      <span id="categoryTitle">All Food</span>
+      <span id="categoryTitle" class="font-semibold text-gray-700">All Food</span>
       <span id="itemCount">0 items</span>
     </div>
 
@@ -74,299 +73,23 @@
 
     <!-- Empty State -->
     <div id="emptyState" class="hidden text-center py-12">
-      <p class="text-gray-500 text-sm">No items match your search.</p>
+      <p class="text-gray-500 text-sm">No items found matching your search.</p>
     </div>
   </main>
 
   <script>
-    // Full Menu Dataset
-    const rawData = [
-      {"id": 1, "name": "Boiled Potatoes & Sauce", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 2, "name": "Fried Potatoes & Fried Egg", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 3, "name": "Yam Porridge & Beans", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 4, "name": "Mixed Rice & Beans", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 5, "name": "Basmatic Fried Rice & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 7000.0},
-      {"id": 6, "name": "Basmatic Fried Rice & Fish", "category": "AGBEKE'S POT", "section": "Food", "price": 7000.0},
-      {"id": 7, "name": "Basmatic Jellof Rice & Fish", "category": "AGBEKE'S POT", "section": "Food", "price": 7000.0},
-      {"id": 8, "name": "White Rice, Plaintain, Stew & Fish", "category": "AGBEKE'S POT", "section": "Food", "price": 5500.0},
-      {"id": 9, "name": "White Rice, Beans, Stew & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 5500.0},
-      {"id": 10, "name": "White Rice Stew & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 11, "name": "Tuwo Shinkafa, Gbegiri, Ewedu & Fish", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 12, "name": "Tuwo Shinkafa, Miyan Kuka & Fish", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 13, "name": "Semo, Egusi & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 14, "name": "Semo, Ogbono & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 15, "name": "Eba, Vegetable Stew & Celmeat", "category": "AGBEKE'S POT", "section": "Food", "price": 5000.0},
-      {"id": 16, "name": "Catfish Pepper Soup Small", "category": "AGBEKE'S POT", "section": "Food", "price": 7000.0},
-      {"id": 17, "name": "Chicken Pepper Soup", "category": "AGBEKE'S POT", "section": "Food", "price": 7000.0},
-      {"id": 18, "name": "Isiewu", "category": "AGBEKE'S POT", "section": "Food", "price": 10000.0},
-      {"id": 19, "name": "Nkwobi", "category": "AGBEKE'S POT", "section": "Food", "price": 10000.0},
-      {"id": 20, "name": "Chinese Rice/Shreded", "category": "AGBEKE'S POT", "section": "Food", "price": 0.0},
-      {"id": 21, "name": "Eba/Semo Egusi/Ewedu Meat", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 22, "name": "Eba/Semo Egusi/Ewedu Fish", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4000.0},
-      {"id": 23, "name": "Pounded Yam Egusi/Ewedu Meat", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4000.0},
-      {"id": 24, "name": "Pounded Yam Egusi/Ewedu Fish", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 25, "name": "White Rice/Jollof Meat/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 26, "name": "White Rice/Jollof Fish/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4000.0},
-      {"id": 27, "name": "Fried Rice Chicken/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 28, "name": "Fried Rice Fish/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 29, "name": "Native Rice Meat/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 30, "name": "Native Rice Fish/Plantain", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4000.0},
-      {"id": 31, "name": "Boiled Yam & Egg Sauce", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 32, "name": "Fried Yam & Egg Sauce", "category": "KUBAI me'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 33, "name": "Chips Chicken/Egg", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 34, "name": "Chicken Peppersoup", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 35, "name": "Cat Fish Peppersoup (Big)", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 10000.0},
-      {"id": 36, "name": "Cat Fish Peppersoup (Medium)", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 8000.0},
-      {"id": 37, "name": "Goat Meat Peppersoup", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 38, "name": "Cow Tail Peppersoup", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 39, "name": "Extra Meat", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 1500.0},
-      {"id": 40, "name": "Extra Fish", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 2000.0},
-      {"id": 41, "name": "Extra Chicken", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 2500.0},
-      {"id": 42, "name": "Extra Swallow/Rice", "category": "KUBAI'S KITCHEN", "section": "Food", "price": 1000.0},
-      {"id": 43, "name": "Pounded Yam with Egusi/Ogbono/Oha and Beef/Bushmeat", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 44, "name": "Semo/Eba with Egusi/Ogbono/Oha and Fish", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 4000.0},
-      {"id": 45, "name": "White Rice/Jollof Rice with Beef/Fish and Plantain", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 46, "name": "Fried Rice with Chicken and Plantain", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 47, "name": "Ofada Rice with Assorted Meat and Egg", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 48, "name": "Catfish Peppersoup (Large)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 10000.0},
-      {"id": 49, "name": "Catfish Peppersoup (Medium)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 7500.0},
-      {"id": 50, "name": "Goathead (Isi Ewu)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 9000.0},
-      {"id": 51, "name": "Nkwobi (Cow Foot)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 8000.0},
-      {"id": 52, "name": "Asun (Spicy Roasted Goat)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 5000.0},
-      {"id": 53, "name": "Boiled/Fried Yam with Egg Sauce", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 54, "name": "French Fries with Peppered Chicken", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 55, "name": "Peppered Chicken/Snail (per portion)", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 3500.0},
-      {"id": 56, "name": "Goat Meat Peppersoup", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 4500.0},
-      {"id": 57, "name": "Extra Portion of Beef/Fish", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 1500.0},
-      {"id": 58, "name": "Extra Portion of Swallow/Rice", "category": "DANIEL JOE'S KITCHEN", "section": "Food", "price": 1000.0},
-      {"id": 59, "name": "Isi Ewu (Full Head)", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 10000.0},
-      {"id": 60, "name": "Nkwobi (Cow Foot)", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 8000.0},
-      {"id": 61, "name": "Abacha with Fish & Kanda", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 4000.0},
-      {"id": 62, "name": "Ugba with Stockfish & Dry Fish", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 5000.0},
-      {"id": 63, "name": "Pounded Yam with Ofe Owerri & Goat Meat", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 6000.0},
-      {"id": 64, "name": "Eba with Egusi & Assorted Meat", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 4000.0},
-      {"id": 65, "name": "White Rice with Ayamase Sauce & Egg", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 4500.0},
-      {"id": 66, "name": "Jollof Rice with Fried Fish & Plantain", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 4000.0},
-      {"id": 67, "name": "Catfish Peppersoup (Point & Kill)", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 9000.0},
-      {"id": 68, "name": "Bushmeat Peppersoup", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 6000.0},
-      {"id": 69, "name": "Spicy Peppered Gizzard", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 3500.0},
-      {"id": 70, "name": "Fried Yam & Peppered Snail", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 5500.0},
-      {"id": 71, "name": "Extra Goat Meat", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 2000.0},
-      {"id": 72, "name": "Extra Stockfish", "category": "BEC-J LICKING FINGERS", "section": "Food", "price": 2500.0},
-      {"id": 73, "name": "Grilled Catfish (Large) with Chips/Plantain", "category": "MOTO GRILL", "section": "Food", "price": 12000.0},
-      {"id": 74, "name": "Grilled Catfish (Medium) with Chips/Plantain", "category": "MOTO GRILL", "section": "Food", "price": 9500.0},
-      {"id": 75, "name": "Grilled Croaker Fish with Chips/Plantain", "category": "MOTO GRILL", "section": "Food", "price": 10000.0},
-      {"id": 76, "name": "Grilled Chicken (Quarter) with Chips", "category": "MOTO GRILL", "section": "Food", "price": 5000.0},
-      {"id": 77, "name": "Grilled Turkey Wing with Chips", "category": "MOTO GRILL", "section": "Food", "price": 6000.0},
-      {"id": 78, "name": "BBQ Beef Pork Ribs with French Fries", "category": "MOTO GRILL", "section": "Food", "price": 8500.0},
-      {"id": 79, "name": "Grilled Tilapia Fish with Potato Wedges", "category": "MOTO GRILL", "section": "Food", "price": 9000.0},
-      {"id": 80, "name": "Asun Platter (Spicy Goat)", "category": "MOTO GRILL", "section": "Food", "price": 7000.0},
-      {"id": 81, "name": "Shawarma (Chicken Special with Cheese)", "category": "MOTO GRILL", "section": "Food", "price": 3500.0},
-      {"id": 82, "name": "Shawarma (Beef Special)", "category": "MOTO GRILL", "section": "Food", "price": 3000.0},
-      {"id": 83, "name": "Grilled Yam & Sauce", "category": "MOTO GRILL", "section": "Food", "price": 2500.0},
-      {"id": 84, "name": "Extra Potato Chips/Plantain", "category": "MOTO GRILL", "section": "Food", "price": 1500.0},
-      {"id": 85, "name": "Beef Suya (Per Stick)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 1000.0},
-      {"id": 86, "name": "Chicken Suya (Half)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 4000.0},
-      {"id": 87, "name": "Chicken Suya (Full)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 7500.0},
-      {"id": 88, "name": "Ram Suya (Per Portion)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 3500.0},
-      {"id": 89, "name": "Kidney/Liver Suya", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 2500.0},
-      {"id": 90, "name": "Masa with Suya & Sauce (4 pcs)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 3000.0},
-      {"id": 91, "name": "Masa Only (4 pcs)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 1200.0},
-      {"id": 92, "name": "Special Suya Platter (Beef, Ram, Chicken, Masa)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 15000.0},
-      {"id": 93, "name": "Gizzard Suya", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 3000.0},
-      {"id": 94, "name": "Kilishi (Pack)", "category": "MAMMAN'S SUYA SPOT", "section": "Food", "price": 3500.0},
-      {"id": 95, "name": "Grilled Catfish (X-Large)", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 14000.0},
-      {"id": 96, "name": "Grilled Catfish (Large)", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 11000.0},
-      {"id": 97, "name": "Grilled Catfish (Medium)", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 8500.0},
-      {"id": 98, "name": "Fried Croaker Fish with Sauce", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 9500.0},
-      {"id": 99, "name": "Fish & Chips (Americana Style)", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 6500.0},
-      {"id": 100, "name": "Seafood Pepper Soup", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 8000.0},
-      {"id": 101, "name": "Spicy Grilled Prawns", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 12000.0},
-      {"id": 102, "name": "Extra Plantain Side", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 1500.0},
-      {"id": 103, "name": "Extra French Fries Side", "category": "AMERICANA FISH SPOT", "section": "Food", "price": 2000.0},
-      {"id": 104, "name": "Ram Suya Special Portion", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 4000.0},
-      {"id": 105, "name": "Ram Head (Full)", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 12000.0},
-      {"id": 106, "name": "Ram Head (Half)", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 6500.0},
-      {"id": 107, "name": "Balangu (Grilled Ram Meat)", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 5000.0},
-      {"id": 108, "name": "Beef Suya Stick", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 1000.0},
-      {"id": 109, "name": "Gurasa (Hausa Bread) with Suya", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 3000.0},
-      {"id": 110, "name": "Masa & Ram Peppersoup", "category": "SURAJ SUYA & RAM", "section": "Food", "price": 4500.0},
-      {"id": 111, "name": "Cocktail - Chapman", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 2500.0},
-      {"id": 112, "name": "Cocktail - Mojito", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 3500.0},
-      {"id": 113, "name": "Cocktail - Pina Colada", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 4000.0},
-      {"id": 114, "name": "Mocktail - Virgin Colada", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 3000.0},
-      {"id": 115, "name": "Fresh Pineapple & Watermelon Juice", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 2000.0},
-      {"id": 116, "name": "Special Milkshake (Chocolate/Vanilla)", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 3500.0},
-      {"id": 117, "name": "Smoothie - Tropical Mix", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 3000.0},
-      {"id": 118, "name": "Ice Cream Scoop (3 Balls)", "category": "IGA'S FRESHIES AND BAR VENTURES", "section": "Food", "price": 2500.0},
-      {"id": 119, "name": "Fried Rice & Grilled Chicken", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 4500.0},
-      {"id": 120, "name": "Jollof Rice & Beef", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 3500.0},
-      {"id": 121, "name": "Chinese Fried Rice with Shredded Beef", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 5500.0},
-      {"id": 122, "name": "Singapore Noodles with Chicken", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 5000.0},
-      {"id": 123, "name": "Pounded Yam & Egusi/Edikang Ikong", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 4500.0},
-      {"id": 124, "name": "Semo & Bitterleaf Soup", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 4000.0},
-      {"id": 125, "name": "Small Chops Platter (Samosa, Springroll, Puff)", "category": "SARDONY & CATERING SERVICES", "section": "Food", "price": 3500.0},
-      {"id": 126, "name": "Arabian Green Tea (Pot)", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 2500.0},
-      {"id": 127, "name": "Arabian Mint Tea (Pot)", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 2500.0},
-      {"id": 128, "name": "Karak Chai Tea (Cup)", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 1500.0},
-      {"id": 129, "name": "Special Ginger & Honey Tea", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 2000.0},
-      {"id": 130, "name": "Shisha / Hookah (Various Flavors)", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 7000.0},
-      {"id": 131, "name": "Shisha Refill", "category": "OBI's ARABIAN TEA", "section": "Food", "price": 3000.0},
-      {"id": 132, "name": "Beef Suya (Special Stick)", "category": "UI BEST SUYA", "section": "Food", "price": 1000.0},
-      {"id": 133, "name": "Chicken Suya Portion", "category": "UI BEST SUYA", "section": "Food", "price": 4000.0},
-      {"id": 134, "name": "Tozo Suya (Fatty Beef)", "category": "UI BEST SUYA", "section": "Food", "price": 3500.0},
-      {"id": 135, "name": "Liver Suya", "category": "UI BEST SUYA", "section": "Food", "price": 2500.0},
-      {"id": 136, "name": "Fresh Orange Juice (50cl)", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2000.0},
-      {"id": 137, "name": "Pineapple & Ginger Juice", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2000.0},
-      {"id": 138, "name": "Watermelon Juice", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2000.0},
-      {"id": 139, "name": "Mixed Fruit Salad Bowl", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2500.0},
-      {"id": 140, "name": "Fruit Salad with Ice Cream", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 3500.0},
-      {"id": 141, "name": "Detox Green Juice", "category": "LADI's FRESH FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2500.0},
-      {"id": 142, "name": "Fresh Apple Juice", "category": " IJE's FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2500.0},
-      {"id": 143, "name": "Mango Juice (Seasonal)", "category": " IJE's FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2000.0},
-      {"id": 144, "name": "Special Citrus Boost", "category": " IJE's FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2500.0},
-      {"id": 145, "name": "Fruit Bowl Small", "category": " IJE's FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 2000.0},
-      {"id": 146, "name": "Fruit Bowl Large", "category": " IJE's FRUIT JUICE & FRUIT SALAD", "section": "Food", "price": 3500.0},
-      {"id": 147, "name": "French Fries (Chips) & Fried Egg", "category": "DE NAIJA FRYS", "section": "Food", "price": 3000.0},
-      {"id": 148, "name": "Fried Yam & Fried Fish", "category": "DE NAIJA FRYS", "section": "Food", "price": 3500.0},
-      {"id": 149, "name": "Fried Plantain & Peppered Chicken", "category": "DE NAIJA FRYS", "section": "Food", "price": 4000.0},
-      {"id": 150, "name": "Potato Chips & Peppered Gizzard", "category": "DE NAIJA FRYS", "section": "Food", "price": 4000.0},
-      {"id": 151, "name": "Naija Fry Platter (Yam, Plantain, Potato, Fish)", "category": "DE NAIJA FRYS", "section": "Food", "price": 7500.0},
-      {"id": 152, "name": "Extra Pepper Sauce", "category": "DE NAIJA FRYS", "section": "Food", "price": 500.0},
-      {"id": 155, "name": "Heineken", "category": "Beer", "section": "Drinks", "price": 2000.0},
-      {"id": 156, "name": "Medium Heineken", "category": "Beer", "section": "Drinks", "price": 1500.0},
-      {"id": 157, "name": "Gulder", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 158, "name": "Star", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 159, "name": "Star Radler", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 160, "name": "Goldberg", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"checked": true, "id": 161, "name": "Goldberg Black", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 162, "name": "Desperado", "category": "Beer", "section": "Drinks", "price": 2000.0},
-      {"id": 163, "name": "Tiger Beer", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 164, "name": "Life", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 165, "name": "Budweiser", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 166, "name": "Castle Lite", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 167, "name": "Trophy Beer", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 168, "name": "Trophy Stout", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 169, "name": "Hero", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 170, "name": "Origin Beer", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 171, "name": "Big Stout", "category": "Beer", "section": "Drinks", "price": 2200.0},
-      {"id": 172, "name": "Medium Stout", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 173, "name": "Guinness Smooth", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 174, "name": "Big Smirnoff Ice", "category": "Beer", "section": "Drinks", "price": 2200.0},
-      {"id": 175, "name": "Small Smimoff Ice", "category": "Beer", "section": "Drinks", "price": 1500.0},
-      {"id": 176, "name": "Double Black", "category": "Beer", "section": "Drinks", "price": 1600.0},
-      {"id": 177, "name": "Draft 50Cl Cup", "category": "Beer", "section": "Drinks", "price": 2500.0},
-      {"id": 178, "name": "Draft 50Cl Cup", "category": "Beer", "section": "Drinks", "price": 2000.0},
-      {"id": 179, "name": "Water", "category": "Water", "section": "Drinks", "price": 300.0},
-      {"id": 180, "name": "Can Malt Family", "category": "Soft Drinks", "section": "Drinks", "price": 1000.0},
-      {"id": 181, "name": "Bottle Malt Family", "category": "Soft Drinks", "section": "Drinks", "price": 1100.0},
-      {"id": 182, "name": "Plastic Coke Family", "category": "Soft Drinks", "section": "Drinks", "price": 600.0},
-      {"id": 183, "name": "Can Coke Family", "category": "Soft Drinks", "section": "Drinks", "price": 800.0},
-      {"id": 184, "name": "Bottle Coke Family", "category": "Soft Drinks", "section": "Drinks", "price": 500.0},
-      {"id": 185, "name": "Can Scheweppes", "category": "Soft Drinks", "section": "Drinks", "price": 800.0},
-      {"id": 186, "name": "Can Fayrouz", "category": "Soft Drinks", "section": "Drinks", "price": 800.0},
-      {"id": 187, "name": "Bottle Fayrouz", "category": "Soft Drinks", "section": "Drinks", "price": 700.0},
-      {"id": 188, "name": "Big Sosa", "category": "Soft Drinks", "section": "Drinks", "price": 1500.0},
-      {"id": 189, "name": "Small Sosa", "category": "Soft Drinks", "section": "Drinks", "price": 600.0},
-      {"id": 190, "name": "Hollandia", "category": "Soft Drinks", "section": "Drinks", "price": 3000.0},
-      {"id": 191, "name": "Plastic Yoghurt", "category": "Soft Drinks", "section": "Drinks", "price": 2000.0},
-      {"id": 192, "name": "Vita Milk", "category": "Soft Drinks", "section": "Drinks", "price": 2000.0},
-      {"id": 193, "name": "Zobo", "category": "Juice", "section": "Drinks", "price": 1000.0},
-      {"id": 194, "name": "Juice", "category": "Juice", "section": "Drinks", "price": 2500.0},
-      {"id": 195, "name": "5 Alive", "category": "Juice", "section": "Drinks", "price": 2000.0},
-      {"id": 196, "name": "Cranberry Can", "category": "Juice", "section": "Drinks", "price": 1500.0},
-      {"id": 197, "name": "Cranberry T.pack", "category": "Juice", "section": "Drinks", "price": 9000.0},
-      {"id": 198, "name": "Ceres", "category": "Juice", "section": "Drinks", "price": 2500.0},
-      {"id": 199, "name": "Chivita 100%", "category": "Juice", "section": "Drinks", "price": 8000.0},
-      {"id": 200, "name": "Red Bull", "category": "Energy Drink", "section": "Drinks", "price": 2000.0},
-      {"id": 201, "name": "Power Horse", "category": "Energy Drink", "section": "Drinks", "price": 2000.0},
-      {"id": 202, "name": "Black Bullet", "category": "Energy Drink", "section": "Drinks", "price": 2000.0},
-      {"id": 203, "name": "Climax", "category": "Energy Drink", "section": "Drinks", "price": 1500.0},
-      {"id": 204, "name": "Big Legend", "category": "Energy Drink", "section": "Drinks", "price": 1600.0},
-      {"id": 205, "name": "Big Origin Bitters", "category": "Bitters & Cordials", "section": "Drinks", "price": 7000.0},
-      {"id": 206, "name": "Small Orin Bitters", "category": "Bitters & Cordials", "section": "Drinks", "price": 1600.0},
-      {"id": 207, "name": "Big Campart", "category": "Bitters & Cordials", "section": "Drinks", "price": 35000.0},
-      {"id": 208, "name": "Small Campari", "category": "Bitters & Cordials", "section": "Drinks", "price": 9000.0},
-      {"id": 209, "name": "Pure Heaven", "category": "Wine", "section": "Drinks", "price": 8000.0},
-      {"id": 210, "name": "Chamdor", "category": "Wine", "section": "Drinks", "price": 8000.0},
-      {"id": 211, "name": "Martinellis", "category": "Wine", "section": "Drinks", "price": 8000.0},
-      {"id": 212, "name": "Veleta", "category": "Wine", "section": "Drinks", "price": 13000.0},
-      {"id": 213, "name": "Velata Can", "category": "Wine", "section": "Drinks", "price": 1600.0},
-      {"id": 214, "name": "Four Cousins", "category": "Wine", "section": "Drinks", "price": 12000.0},
-      {"id": 215, "name": "Big Drosty Hof", "category": "Wine", "section": "Drinks", "price": 12000.0},
-      {"id": 216, "name": "Small Drosty Hof", "category": "Wine", "section": "Drinks", "price": 7000.0},
-      {"id": 217, "name": "Scot Hills", "category": "Wine", "section": "Drinks", "price": 15000.0},
-      {"id": 218, "name": "Carlo Rossi Swt Red", "category": "Wine", "section": "Drinks", "price": 13000.0},
-      {"id": 219, "name": "Andre Rose Brutt", "category": "Wine", "section": "Drinks", "price": 15000.0},
-      {"id": 220, "name": "Parrot", "category": "Wine", "section": "Drinks", "price": 12000.0},
-      {"id": 221, "name": "Donfelder", "category": "Wine", "section": "Drinks", "price": 15000.0},
-      {"id": 222, "name": "Agor", "category": "Wine", "section": "Drinks", "price": 13000.0},
-      {"id": 223, "name": "Mouton Cadet", "category": "Wine", "section": "Drinks", "price": 25000.0},
-      {"id": 224, "name": "Macnellis Alch", "category": "Wine", "section": "Drinks", "price": 10000.0},
-      {"id": 225, "name": "Escudo Rojo", "category": "Wine", "section": "Drinks", "price": 25000.0},
-      {"id": 226, "name": "Nederburg", "category": "Wine", "section": "Drinks", "price": 25000.0},
-      {"id": 227, "name": "Lambrusco", "category": "Wine", "section": "Drinks", "price": 15000.0},
-      {"id": 228, "name": "Massimo Joven", "category": "Wine", "section": "Drinks", "price": 12000.0},
-      {"id": 229, "name": "Pastorial Alch", "category": "Wine", "section": "Drinks", "price": 15000.0},
-      {"id": 230, "name": "Royal Circle", "category": "Wine", "section": "Drinks", "price": 12000.0},
-      {"id": 231, "name": "Liria White", "category": "Wine", "section": "Drinks", "price": 10000.0},
-      {"id": 232, "name": "Grand Castillo", "category": "Wine", "section": "Drinks", "price": 10000.0},
-      {"id": 233, "name": "Barron", "category": "Wine", "section": "Drinks", "price": 10000.0},
-      {"id": 234, "name": "Elliot", "category": "Wine", "section": "Drinks", "price": 17000.0},
-      {"id": 235, "name": "Bachus Tonic Red", "category": "Wine", "section": "Drinks", "price": 9000.0},
-      {"id": 236, "name": "Rubbis", "category": "Wine", "section": "Drinks", "price": 22000.0},
-      {"id": 237, "name": "Two Oceans", "category": "Wine", "section": "Drinks", "price": 13000.0},
-      {"id": 238, "name": "Declan", "category": "Wine", "section": "Drinks", "price": 17000.0},
-      {"id": 239, "name": "Teramagna", "category": "Wine", "section": "Drinks", "price": 17000.0},
-      {"id": 240, "name": "Dorado", "category": "Wine", "section": "Drinks", "price": 10000.0},
-      {"id": 241, "name": "Foreign Wine 1979", "category": "Wine", "section": "Drinks", "price": 18000.0},
-      {"id": 242, "name": "Foreign SpanishWine", "category": "Wine", "section": "Drinks", "price": 25000.0},
-      {"id": 243, "name": "Big Gordons", "category": "Spirits", "section": "Drinks", "price": 12000.0},
-      {"id": 244, "name": "Small Gordons", "category": "Spirits", "section": "Drinks", "price": 3000.0},
-      {"id": 245, "name": "Captain Morgan", "category": "Spirits", "section": "Drinks", "price": 13000.0},
-      {"id": 246, "name": "New Amsterdam", "category": "Spirits", "section": "Drinks", "price": 25000.0},
-      {"id": 247, "name": "American Honey", "category": "Spirits", "section": "Drinks", "price": 30000.0},
-      {"id": 248, "name": "The God Father (Cocktail)", "category": "Spirits", "section": "Drinks", "price": 85000.0},
-      {"id": 249, "name": "Tails Cocktails", "category": "Spirits", "section": "Drinks", "price": 40000.0},
-      {"id": 250, "name": "Imperial Blue", "category": "Whisky", "section": "Drinks", "price": 10000.0},
-      {"id": 251, "name": "Jameson Green", "category": "Whisky", "section": "Drinks", "price": 42000.0},
-      {"id": 252, "name": "Jameson Black", "category": "Whisky", "section": "Drinks", "price": 52000.0},
-      {"id": 253, "name": "Element", "category": "Whisky", "section": "Drinks", "price": 65000.0},
-      {"id": 254, "name": "White & Black Wsky", "category": "Whisky", "section": "Drinks", "price": 15000.0},
-      {"id": 255, "name": "JW Blonde", "category": "Whisky", "section": "Drinks", "price": 23000.0},
-      {"id": 256, "name": "Red Label", "category": "Whisky", "section": "Drinks", "price": 22000.0},
-      {"id": 257, "name": "Black Label", "category": "Whisky", "section": "Drinks", "price": 50000.0},
-      {"id": 258, "name": "Gold Label", "category": "Whisky", "section": "Drinks", "price": 25000.0},
-      {"id": 259, "name": "Jack Daniels", "category": "Whisky", "section": "Drinks", "price": 35000.0},
-      {"id": 260, "name": "Jack Williams", "category": "Whisky", "section": "Drinks", "price": 12000.0},
-      {"id": 261, "name": "William Lawson", "category": "Whisky", "section": "Drinks", "price": 16000.0},
-      {"id": 262, "name": "Glen Silver", "category": "Whisky", "section": "Drinks", "price": 22000.0},
-      {"id": 263, "name": "Moet Brutt", "category": "Champagne", "section": "Drinks", "price": 120000.0},
-      {"id": 264, "name": "Moet Rose", "category": "Champagne", "section": "Drinks", "price": 150000.0},
-      {"id": 265, "name": "Absolute Vodka", "category": "Vodka", "section": "Drinks", "price": 22000.0},
-      {"id": 266, "name": "XI Vodka", "category": "Vodka", "section": "Drinks", "price": 10000.0},
-      {"id": 267, "name": "Hennessy VS", "category": "Cognac", "section": "Drinks", "price": 70000.0},
-      {"id": 268, "name": "Hennessy VSOP", "category": "Cognac", "section": "Drinks", "price": 140000.0},
-      {"id": 269, "name": "Glenfiddich 15yrs", "category": "Cognac", "section": "Drinks", "price": 120000.0},
-      {"id": 270, "name": "Glenfiddich 18yrs", "category": "Cognac", "section": "Drinks", "price": 160000.0},
-      {"id": 271, "name": "Glenfiddich 21yzs", "category": "Cognac", "section": "Drinks", "price": 400000.0},
-      {"id": 272, "name": "St Remedy VSOP", "category": "Cognac", "section": "Drinks", "price": 12000.0},
-      {"id": 273, "name": "Best Cream", "category": "Cream Liqueur", "section": "Drinks", "price": 10000.0},
-      {"id": 274, "name": "Belleys Original", "category": "Cream Liqueur", "section": "Drinks", "price": 25000.0},
-      {"id": 275, "name": "Big Amarula", "category": "Cream Liqueur", "section": "Drinks", "price": 18000.0},
-      {"id": 276, "name": "Small Amarula", "category": "Cream Liqueur", "section": "Drinks", "price": 12000.0}
-    ];
+    // Harmonized Dataset (360+ items across Food Vendors & Central Bar)
+    const rawData = [{"name":"Full Chicken","category":"Mamman Garba (Kiosk 1)","section":"Food","price":6000.0},{"name":"1 Stick Of Beef","category":"Mamman Garba (Kiosk 1)","section":"Food","price":500.0},{"name":"1 Stick Of Kidney","category":"Mamman Garba (Kiosk 1)","section":"Food","price":500.0},{"name":"1 Stick Of Liver","category":"Mamman Garba (Kiosk 1)","section":"Food","price":500.0},{"name":"1 Stick Of Gizzard","category":"Mamman Garba (Kiosk 1)","section":"Food","price":500.0},{"name":"1 Portion Of Masa","category":"Mamman Garba (Kiosk 1)","section":"Food","price":300.0},{"name":"Pepper (yaji)","category":"Mamman Garba (Kiosk 1)","section":"Food","price":1000.0},{"name":"Tilapia Fish","category":"Madam Agnes (Kiosk 3)","section":"Food","price":13000.0},{"name":"1 Big size","category":"Madam Agnes (Kiosk 3)","section":"Food","price":11000.0},{"name":"1 Medium size","category":"Madam Agnes (Kiosk 3)","section":"Food","price":10000.0},{"name":"Cat Fish","category":"Madam Agnes (Kiosk 3)","section":"Food","price":11000.0},{"name":"1 Big size","category":"Madam Agnes (Kiosk 3)","section":"Food","price":10000.0},{"name":"CROCKER  Fish","category":"Madam Agnes (Kiosk 3)","section":"Food","price":15000.0},{"name":"1 Big size","category":"Madam Agnes (Kiosk 3)","section":"Food","price":12000.0},{"name":"1 Medium size","category":"Madam Agnes (Kiosk 3)","section":"Food","price":11000.0},{"name":"Full Isi Ewo","category":"Madam Monique (Kiosk 4)","section":"Food","price":4000.0},{"name":"Half Isi Ewo","category":"Madam Monique (Kiosk 4)","section":"Food","price":8000.0},{"name":"Half Chicken Nkworbi With Veg","category":"Madam Monique (Kiosk 4)","section":"Food","price":14000.0},{"name":"Full Chicken Nkworbi With Veg","category":"Madam Monique (Kiosk 4)","section":"Food","price":7000.0},{"name":"Goat MEAT PEPPER SOUP","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Goat LEG NKWORBI","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Cow Head Pepper Soup With A Choice Of Rice Or Agidi","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Kpomo With Veg","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Dry Fish Peper Soup","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Fish / Plantain Peper Soup","category":"Madam Monique (Kiosk 4)","section":"Food","price":5000.0},{"name":"Moi Moi With Leaf","category":"Madam Monique (Kiosk 4)","section":"Food","price":1000.0},{"name":"Half Plate Of Snail With Veg","category":"Madam Monique (Kiosk 4)","section":"Food","price":15000.0},{"name":"Cow Leg Pepper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Cow Tail Pepper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Cowhead Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Goat Meat Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Cow Assorted Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Goat Assorted Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":3000.0},{"name":"Chicken Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":4000.0},{"name":"Dry Fish Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":6000.0},{"name":"Fresh Fish Peper Soup","category":"Madam Valerie (Kiosk 5)","section":"Food","price":4000.0},{"name":"Pepper Snail","category":"Madam Valerie (Kiosk 5)","section":"Food","price":10000.0},{"name":"WHITE SOUP(Goat Assorted)","category":"Madam Valerie (Kiosk 5)","section":"Food","price":4000.0},{"name":"WHITE SOUP(Chicken)","category":"Madam Valerie (Kiosk 5)","section":"Food","price":5000.0},{"name":"A Portion Of Agidi","category":"Madam Valerie (Kiosk 5)","section":"Food","price":500.0},{"name":"A Portion Of Plantain","category":"Madam Valerie (Kiosk 5)","section":"Food","price":500.0},{"name":"A Portion Of Irish Potato","category":"Madam Valerie (Kiosk 5)","section":"Food","price":1000.0},{"name":"A Portion Of White Rice","category":"Madam Valerie (Kiosk 5)","section":"Food","price":300.0},{"name":"A Portion Of Pounded Yam","category":"Madam Valerie (Kiosk 5)","section":"Food","price":500.0},{"name":"1 Piece Of Masa Jumbo Size","category":"Haj Nana (Kiosk 8)","section":"Food","price":300.0},{"name":"1 Piece Of Masa Medium Size","category":"Haj Nana (Kiosk 8)","section":"Food","price":200.0},{"name":"1 Piece Of Meat","category":"Haj Nana (Kiosk 8)","section":"Food","price":500.0},{"name":"6 Piece Of Masa Jumbo Size, Miya Taushe And Two Meats And Yaji","category":"Haj Nana (Kiosk 8)","section":"Food","price":3000.0},{"name":"5 Piece Of Masa Medium Size, Miya Taushe And One Meats And Yaji","category":"Haj Nana (Kiosk 8)","section":"Food","price":1500.0},{"name":"Cow Leg Pepper Soup With Irish Potato","category":"Haj Nana (Kiosk 8)","section":"Food","price":4000.0},{"name":"Cow Leg Pepper Soup With Unripe","category":"Haj Nana (Kiosk 8)","section":"Food","price":4000.0},{"name":"Cowtail Peper Soup With Irish Potato","category":"Haj Nana (Kiosk 8)","section":"Food","price":4000.0},{"name":"Cow Tail Peper Soup With Unripe","category":"Haj Nana (Kiosk 8)","section":"Food","price":4000.0},{"name":"1 Piece Of Akara Jumbo Size","category":"Haj Nana (Kiosk 8)","section":"Food","price":200.0},{"name":"1 Piece Of Akara Medium Size","category":"Haj Nana (Kiosk 8)","section":"Food","price":100.0},{"name":"1 Bowl Of Koko","category":"Haj Nana (Kiosk 8)","section":"Food","price":1000.0},{"name":"1 Bowl Of Koko With 5 Medium Size Akara","category":"Haj Nana (Kiosk 8)","section":"Food","price":1500.0},{"name":"1 Bowl Of Koko With 5 Jumbo Size Akara","category":"Haj Nana (Kiosk 8)","section":"Food","price":2000.0},{"name":"Kunu Tsamiya","category":"Haj Nana (Kiosk 8)","section":"Food","price":1000.0},{"name":"Bowl Of Tigernut Pap","category":"Haj Nana (Kiosk 8)","section":"Food","price":1800.0},{"name":"1 Big Jug Of Arabian Tea For Men And Woman","category":"Haj Nana (Kiosk 8)","section":"Food","price":4000.0},{"name":"1 Small Jug Of Arabian Tea For Men And Woman","category":"Haj Nana (Kiosk 8)","section":"Food","price":2000.0},{"name":"50CL Zobo Drink","category":"Haj Nana (Kiosk 8)","section":"Food","price":1000.0},{"name":"50CL Tigernut Drink","category":"Haj Nana (Kiosk 8)","section":"Food","price":1500.0},{"name":"Ram Suya","category":"Suraju Power (Kiosk 9)","section":"Food","price":4000.0},{"name":"Beef Suya","category":"Suraju Power (Kiosk 9)","section":"Food","price":500.0},{"name":"Masa","category":"Suraju Power (Kiosk 9)","section":"Food","price":300.0},{"name":"Ram Suya And Chips","category":"Suraju Power (Kiosk 9)","section":"Food","price":4000.0},{"name":"White Rice Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Vegetable Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Beans Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Jollof Rice Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Fried Rice Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Pepper Gizzard","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":2500.0},{"name":"Pepper Goat Meat (asu)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":2500.0},{"name":"Dry Cat Fish Pepper Soup With Irish / Sweet Potato","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":8000.0},{"name":"Pounded Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Semovita Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Amala Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Wheat Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Eba Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Acha Swallow Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Fufu Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Gwatah /petah Acha","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":2000.0},{"name":"Plantain Portion","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Egusi Soup","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Ogbono Soup","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"Okro Soup","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Bitterleaf Soup","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Oha Soup","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"GOAT MEAT (big Size)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"GOAT MEAT (medium Size)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":800.0},{"name":"GOAT MEAT (small Size)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":500.0},{"name":"BEEF (big size)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1000.0},{"name":"BEEF (small size)","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":500.0},{"name":"Titus Fish","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Crocker Fish","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":2000.0},{"name":"Kpanla Fish","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":1500.0},{"name":"Chicken","category":"Mrs Saratu (Kiosk 10)","section":"Food","price":2000.0},{"name":"A Portion Of Rice","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"A Portion Of Beans","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"A Portion Of Amala","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"A Portion Of Semo","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"A Portion Of Jollof Rice","category":"Madam Agbeke (Restaurant)","section":"Food","price":1500.0},{"name":"A Portion Of Pounded Yam","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"Goat Meat Pepper Soup","category":"Madam Agbeke (Restaurant)","section":"Food","price":4000.0},{"name":"1 Wrap Of Moi Moi","category":"Madam Agbeke (Restaurant)","section":"Food","price":2000.0},{"name":"1 Plate Of Chanise Dish","category":"Madam Agbeke (Restaurant)","section":"Food","price":10000.0},{"name":"1 Plate Of Ofada Rice, Platain Egg Souce And Fish","category":"Madam Agbeke (Restaurant)","section":"Food","price":10000.0},{"name":"1 Portion Of Ewa- Agoyin","category":"Madam Agbeke (Restaurant)","section":"Food","price":2000.0},{"name":"1 Portion Veggies And Pasta","category":"Madam Agbeke (Restaurant)","section":"Food","price":2000.0},{"name":"1 Piece Of Goat Meat","category":"Madam Agbeke (Restaurant)","section":"Food","price":2000.0},{"name":"1 Piece Of Small Size Beef","category":"Madam Agbeke (Restaurant)","section":"Food","price":500.0},{"name":"1 Piece Of Offal","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"Ponmo","category":"Madam Agbeke (Restaurant)","section":"Food","price":500.0},{"name":"Fish","category":"Madam Agbeke (Restaurant)","section":"Food","price":2000.0},{"name":"1 Medium Size Beef","category":"Madam Agbeke (Restaurant)","section":"Food","price":1000.0},{"name":"Cat Fish Pepper Soup","category":"Madam Agbeke (Restaurant)","section":"Food","price":5000.0},{"name":"Crocker Fish Pepper Soup","category":"Madam Agbeke (Restaurant)","section":"Food","price":5000.0},{"name":"A Glass Cup Alholic Champman","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Bailey Shake","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Artillery Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Americano Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup After Dinner Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Bailey Chocolate Shake","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Blue Lagoon","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Cape Codder","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Babies Special","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Campari Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Cosmo Politan","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3500.0},{"name":"A Glass Cup Gentle Ben","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Gordons Gin And Buck","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Gordons Gin And Sin","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Hula- Hula","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Hot Pant","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Kami - Kaze","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Kiss The Boys And Say Goodbye","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Kiss Me Quick","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Long Island Ice Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Mexicana","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Olympic Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Orange Blossom","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Orage Buck","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Rum Buck","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Screw Driver","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Rum Screw Driver","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Red Lion Cocktal","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Santiago Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Scotch Mist","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Scotch Soar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Sea Breeze Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Sex On The Beach","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup St Peter Burg","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Sombrero","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Southern Gin","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Spanish Town","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Submarino (special Order)","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Tequila Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Tequila Shot","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Tequila Sunshine","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Union Jack","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Victory Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Vodka Daisy","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Vodka Sour","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"A Glass Cup Wet Pussy","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Woman Warrior","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Woo -woo","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"A Glass Cup Zosty Cooler Cocktail","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"Small Jug Arabian Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Big Jug Arabian Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":3000.0},{"name":"Small Jug Arabian Tea (man Power)","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Big Jug Arabian Tea (man Power)","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":5000.0},{"name":"Small Jug Cinamon Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Natural Green Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Natural Mints Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Natural Ginger Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Naturalcadamon Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Natural Moringa Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"75CL Natural Manpower","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"1 Cup Sunburger","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Double \u2013 Double","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Woman Cleanser Bitters","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Anti \u2013 Postrate","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"Small Jug Goriva","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":2500.0},{"name":"1 Cup Tesante Relaxation","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":1000.0},{"name":"1 Cup Black Coffee","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":1000.0},{"name":"1 Cup Detuxe Tea","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":1000.0},{"name":"1 Cup Lemon Grass And Any Tea Of Your Choice","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":1000.0},{"name":"1 Cup Debino Tea With Lemon Grass","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":1000.0},{"name":"1 Cup Milo, Milk, And Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Custard, Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Nescaf, Milk,sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Lipton Tea, Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup High Land Tea, Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Top Tea, Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Green Tea Without Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Cup Ahmed Tea (manjo) Without Milk, Sugar","category":"Mr Obi Emmanuel (Arabian Tea & Bar)","section":"Food","price":500.0},{"name":"1 Ltre","category":"Miss Mercy Achu (Palmwine)","section":"Food","price":2500.0},{"name":"Half Ltre","category":"Miss Mercy Achu (Palmwine)","section":"Food","price":1250.0},{"name":"Fruit Salad","category":"Mrs Okorie Ijeoma (Fruits & Salad)","section":"Food","price":1000.0},{"name":"Varities Of Fruit Juice","category":"Mrs Okorie Ijeoma (Fruits & Salad)","section":"Food","price":2000.0},{"name":"Fruit Salad With Milk","category":"Mrs Okorie Ijeoma (Fruits & Salad)","section":"Food","price":1500.0},{"name":"Africa Salad","category":"Mrs Okorie Ijeoma (Fruits & Salad)","section":"Food","price":1000.0},{"name":"Fruit Salad","category":"Miss Ladi Akuke (Fruits & Salad)","section":"Food","price":1000.0},{"name":"Varities Of Fruit Juice","category":"Miss Ladi Akuke (Fruits & Salad)","section":"Food","price":2000.0},{"name":"Fruit Salad With Milk","category":"Miss Ladi Akuke (Fruits & Salad)","section":"Food","price":1500.0},{"name":"Africa Salad","category":"Miss Ladi Akuke (Fruits & Salad)","section":"Food","price":1000.0},{"name":"Chicken Shawama Double Sausage","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":5000.0},{"name":"Chicken Shawama Single Sausage","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":4500.0},{"name":"Beef Shawama Single Sausage","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":4000.0},{"name":"Tiger Nut","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":1500.0},{"name":"Yoghurt","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":3000.0},{"name":"Coconut Yoghurt","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":3500.0},{"name":"Parfait","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":5000.0},{"name":"Fruit Juice","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":2500.0},{"name":"Pepper Chicken Gizzard Six Piece","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":3000.0},{"name":"Pepper Bush Meat","category":"Miss Cookies (Shawarma & Smoothies)","section":"Food","price":10000.0},{"name":"Full Chicken Suya","category":"Mallam Usman (Suya Spot)","section":"Food","price":6000.0},{"name":"1 Portion Ram Suya","category":"Mallam Usman (Suya Spot)","section":"Food","price":3000.0},{"name":"1 Stick Of Beef Suya","category":"Mallam Usman (Suya Spot)","section":"Food","price":500.0},{"name":"1 Stick Of Gizzard","category":"Mallam Usman (Suya Spot)","section":"Food","price":500.0},{"name":"1 Stick Of Kidney","category":"Mallam Usman (Suya Spot)","section":"Food","price":500.0},{"name":"1 piece of Puffpuff","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":200.0},{"name":"1 piece of Buns","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":200.0},{"name":"1 Big Bottle of Groundnut","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":3000.0},{"name":"1 Small Bottle of Groundnut","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":1500.0},{"name":"1 Big Bowl of Popcorn and groundnut","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":2000.0},{"name":"1 Small Bowl of Popcorn and groundnut","category":"Madam Favour (Popcorn & Snacks)","section":"Food","price":1000.0},{"name":"1 Big Size Meat Pie","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":1000.0},{"name":"1 Small Size Meat Pie","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":500.0},{"name":"1 Chicken Pie","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":1500.0},{"name":"1 Big Size Doughnut","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":500.0},{"name":"1 Small Size Doughnut","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":300.0},{"name":"1 Egg Roll","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":700.0},{"name":"1 Sausage Roll","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":800.0},{"name":"1 Fish Roll","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":1000.0},{"name":"1 Puff Puff","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":100.0},{"name":"1 Samosa","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":400.0},{"name":"1 Spring Roll","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":300.0},{"name":"Big Size Peppered Chicken","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":1500.0},{"name":"Small Size Peppered Chicken","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":1000.0},{"name":"1piece Peppered Beef","category":"Mrs Rukayat (Piwoyi Snacks)","section":"Food","price":500.0},{"name":"Heineken","category":"Beer","section":"Drinks","price":2000.0},{"name":"M/Heineken","category":"Beer","section":"Drinks","price":1600.0},{"name":"Big Legend","category":"Beer","section":"Drinks","price":2000.0},{"name":"Legend Twist","category":"Beer","section":"Drinks","price":1600.0},{"name":"Gulder","category":"Beer","section":"Drinks","price":1800.0},{"name":"Star","category":"Beer","section":"Drinks","price":1800.0},{"name":"Star Radler","category":"Beer","section":"Drinks","price":1600.0},{"name":"Goldberg","category":"Beer","section":"Drinks","price":1600.0},{"name":"Goldberg Black","category":"Beer","section":"Drinks","price":1600.0},{"name":"Desperado","category":"Beer","section":"Drinks","price":2000.0},{"name":"Tiger Beer","category":"Beer","section":"Drinks","price":1600.0},{"name":"Life","category":"Beer","section":"Drinks","price":1600.0},{"name":"Flying Fish","category":"Beer","section":"Drinks","price":1600.0},{"name":"Budweiser","category":"Beer","section":"Drinks","price":1800.0},{"name":"Budweiser Royale","category":"Beer","section":"Drinks","price":2000.0},{"name":"Castle Lite","category":"Beer","section":"Drinks","price":1600.0},{"name":"Trophy Beer","category":"Beer","section":"Drinks","price":1600.0},{"name":"Trophy Stout","category":"Stout","section":"Drinks","price":1600.0},{"name":"Hero","category":"Beer","section":"Drinks","price":1600.0},{"name":"Origin Beer","category":"Beer","section":"Drinks","price":1600.0},{"name":"Big Stout","category":"Stout","section":"Drinks","price":2200.0},{"name":"Medium Stout","category":"Stout","section":"Drinks","price":1600.0},{"name":"Guinness Smooth","category":"Stout","section":"Drinks","price":1600.0},{"name":"B/Smnoff Ice","category":"Other Drinks","section":"Drinks","price":2200.0},{"name":"S/Smnoff Ice","category":"Other Drinks","section":"Drinks","price":1600.0},{"name":"Double Black","category":"RTD & Cider","section":"Drinks","price":1600.0},{"name":"Water","category":"Water","section":"Drinks","price":300.0},{"name":"Can Malt","category":"Soft Drinks","section":"Drinks","price":1000.0},{"name":"Bottle Malt","category":"Soft Drinks","section":"Drinks","price":1100.0},{"name":"Pet Coke","category":"Soft Drinks","section":"Drinks","price":600.0},{"name":"Can Coke","category":"Soft Drinks","section":"Drinks","price":800.0},{"name":"Bottle Coke","category":"Soft Drinks","section":"Drinks","price":500.0},{"name":"Can Scheweppe","category":"Soft Drinks","section":"Drinks","price":800.0},{"name":"Can Fayrouz","category":"Soft Drinks","section":"Drinks","price":900.0},{"name":"Bottle Fayrouz","category":"Soft Drinks","section":"Drinks","price":700.0},{"name":"Zobo Drink","category":"Other Drinks","section":"Drinks","price":1000.0},{"name":"Sosa Drink","category":"Soft Drinks","section":"Drinks","price":600.0},{"name":"Chivita Juice","category":"Juices","section":"Drinks","price":2500.0},{"name":"Chivita 100%","category":"Juices","section":"Drinks","price":3000.0},{"name":"Frutta Natural","category":"Juices","section":"Drinks","price":2500.0},{"name":"5 Alive Pulpy","category":"Juices","section":"Drinks","price":2000.0},{"name":"Hollandia","category":"Dairy & Yoghurt","section":"Drinks","price":3000.0},{"name":"Funky Yoghurt","category":"Dairy & Yoghurt","section":"Drinks","price":3000.0},{"name":"Liemah Yoghurt","category":"Dairy & Yoghurt","section":"Drinks","price":3000.0},{"name":"Vita Milk","category":"Dairy & Yoghurt","section":"Drinks","price":2000.0},{"name":"Chamdor","category":"Wines","section":"Drinks","price":8000.0},{"name":"Pure Heaven","category":"Wines","section":"Drinks","price":8000.0},{"name":"Veleta","category":"Wines","section":"Drinks","price":8000.0},{"name":"Can Veleta","category":"Wines","section":"Drinks","price":1600.0},{"name":"J &w","category":"Wines","section":"Drinks","price":8000.0},{"name":"Casa Dorado","category":"Wines","section":"Drinks","price":8000.0},{"name":"Martinellis","category":"Wines","section":"Drinks","price":13000.0},{"name":"Ceres","category":"Juices","section":"Drinks","price":2500.0},{"name":"Cranberry Tpack","category":"Juices","section":"Drinks","price":9000.0},{"name":"Tomi Cranberry","category":"Juices","section":"Drinks","price":1600.0},{"name":"Stute Cranberry","category":"Juices","section":"Drinks","price":2000.0},{"name":"Red Bull","category":"Energy Drinks","section":"Drinks","price":2000.0},{"name":"Climax","category":"Energy Drinks","section":"Drinks","price":1500.0},{"name":"Power Horse","category":"Energy Drinks","section":"Drinks","price":2000.0},{"name":"Monster Energy","category":"Energy Drinks","section":"Drinks","price":1500.0},{"name":"Blue Bullet","category":"Energy Drinks","section":"Drinks","price":1500.0},{"name":"Black Bullet","category":"Energy Drinks","section":"Drinks","price":2000.0},{"name":"Big Origin Bitters","category":"Bitters & Cordials","section":"Drinks","price":7000.0},{"name":"Small Origin Bitters","category":"Bitters & Cordials","section":"Drinks","price":1600.0},{"name":"Big Gordons","category":"Spirits & Cocktails","section":"Drinks","price":12000.0},{"name":"Small Gordons","category":"Spirits & Cocktails","section":"Drinks","price":3000.0},{"name":"Big Campari","category":"Bitters & Cordials","section":"Drinks","price":35000.0},{"name":"Small Campari","category":"Bitters & Cordials","section":"Drinks","price":9500.0},{"name":"Four Cousins","category":"Wines","section":"Drinks","price":12000.0},{"name":"B/ Drosty Hof","category":"Wines","section":"Drinks","price":12000.0},{"name":"S/Drosty Hof","category":"Wines","section":"Drinks","price":7000.0},{"name":"Scot Hills","category":"Wines","section":"Drinks","price":15000.0},{"name":"Carlo Rossi","category":"Wines","section":"Drinks","price":13000.0},{"name":"Andre Rose/Brut","category":"Champagne & Sparkling","section":"Drinks","price":15000.0},{"name":"Imperial Blue","category":"Whiskies","section":"Drinks","price":10000.0},{"name":"Parrot","category":"Wines","section":"Drinks","price":12000.0},{"name":"Donfelder","category":"Wines","section":"Drinks","price":15000.0},{"name":"Agor","category":"Wines","section":"Drinks","price":13000.0},{"name":"Mouton Cadet","category":"Wines","section":"Drinks","price":25000.0},{"name":"Macnellis","category":"Wines","section":"Drinks","price":10000.0},{"name":"Black Jameson","category":"Whiskies","section":"Drinks","price":52000.0},{"name":"Green Jameson","category":"Whiskies","section":"Drinks","price":42000.0},{"name":"Element","category":"Other Drinks","section":"Drinks","price":65000.0},{"name":"Absolute Vodka","category":"Vodka","section":"Drinks","price":22000.0},{"name":"X1 Vodka","category":"Vodka","section":"Drinks","price":10000.0},{"name":"Croc Vodka","category":"Vodka","section":"Drinks","price":0.0},{"name":"Grande Castillo","category":"Other Drinks","section":"Drinks","price":10000.0},{"name":"Escudo Rojo","category":"Wines","section":"Drinks","price":25000.0},{"name":"Nederburg","category":"Wines","section":"Drinks","price":25000.0},{"name":"Lambrusco","category":"Wines","section":"Drinks","price":15000.0},{"name":"Massimo","category":"Wines","section":"Drinks","price":15000.0},{"name":"Liria White","category":"Wines","section":"Drinks","price":10000.0},{"name":"Frontera Swt Red","category":"Wines","section":"Drinks","price":12000.0},{"name":"Black Label","category":"Whiskies","section":"Drinks","price":50000.0},{"name":"Red Label","category":"Whiskies","section":"Drinks","price":23000.0},{"name":"Gold Label","category":"Whiskies","section":"Drinks","price":25000.0},{"name":"Jack Daniels","category":"Whiskies","section":"Drinks","price":36000.0},{"name":"William Lawson","category":"Whiskies","section":"Drinks","price":16000.0},{"name":"Hennessy VS","category":"Cognac & Single Malt","section":"Drinks","price":70000.0},{"name":"Hennessy VSOP","category":"Cognac & Single Malt","section":"Drinks","price":140000.0},{"name":"Glenfiddich 12yrs","category":"Cognac & Single Malt","section":"Drinks","price":105000.0},{"name":"Glenfiddich 15yrs","category":"Cognac & Single Malt","section":"Drinks","price":120000.0},{"name":"Glenfiddich 18yrs","category":"Cognac & Single Malt","section":"Drinks","price":160000.0},{"name":"Glenfiddich 21yrs","category":"Cognac & Single Malt","section":"Drinks","price":400000.0},{"name":"Glen Silver","category":"Whiskies","section":"Drinks","price":22000.0},{"name":"Martel VS","category":"Cognac & Single Malt","section":"Drinks","price":0.0},{"name":"Martel Blue Swift","category":"Cognac & Single Malt","section":"Drinks","price":0.0},{"name":"Donjulio Anejo","category":"Tequila","section":"Drinks","price":0.0},{"name":"818 Tequila Reposado","category":"Tequila","section":"Drinks","price":0.0},{"name":"818 Tequila Blanco","category":"Tequila","section":"Drinks","price":0.0},{"name":"American Honey","category":"Spirits & Cocktails","section":"Drinks","price":0.0},{"name":"The God Father","category":"Spirits & Cocktails","section":"Drinks","price":0.0},{"name":"Tails Cocktails trophy","category":"Spirits & Cocktails","section":"Drinks","price":0.0},{"name":"Best Cream","category":"Cream Liqueur","section":"Drinks","price":10000.0},{"name":"Belleys Original","category":"Cream Liqueur","section":"Drinks","price":25000.0},{"name":"Big Amarula","category":"Cream Liqueur","section":"Drinks","price":18000.0},{"name":"Small Amarula","category":"Cream Liqueur","section":"Drinks","price":12000.0},{"name":"Draft 50Cl Cup","category":"Beer","section":"Drinks","price":10000.0},{"name":"Draft 35Cl Cup","category":"Beer","section":"Drinks","price":22000.0},{"name":"Arra Viognier","category":"Wines","section":"Drinks","price":16000.0},{"name":"Arra De Noir","category":"Wines","section":"Drinks","price":20000.0},{"name":"Arra Acct Blend","category":"Wines","section":"Drinks","price":20000.0}];
 
     let currentSection = "Food"; // "Food" or "Drinks"
     let currentCategory = "All";
     let searchQuery = "";
 
     function formatMoney(amount) {
-      if (amount === 0) return "Market Price";
-      return "₦" + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (amount <= 0) return "Market Price";
+      return "₦" + amount.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
 
-    // Toggle between Food and Drinks
     window.setSection = function(section) {
       currentSection = section;
       currentCategory = "All";
@@ -386,7 +109,6 @@
       renderMenu();
     };
 
-    // Render Category Pills dynamically based on section
     function renderCategories() {
       const container = document.getElementById("categoryContainer");
       const sectionItems = rawData.filter(item => item.section === currentSection);
@@ -396,7 +118,7 @@
         const isActive = cat === currentCategory;
         return `
           <button 
-            onclick="setCategory('${cat.replace(/'/g, "\\'")}')"
+            onclick="setCategory('${cat.replace(/'/g, "\\\'")}')"
             class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               isActive 
                 ? 'bg-emerald-800 text-white shadow-sm' 
@@ -409,14 +131,12 @@
       }).join('');
     }
 
-    // Set Active Sub-Category
     window.setCategory = function(cat) {
       currentCategory = cat;
       renderCategories();
       renderMenu();
     };
 
-    // Render Items
     function renderMenu() {
       const menuList = document.getElementById("menuList");
       const emptyState = document.getElementById("emptyState");
@@ -426,8 +146,10 @@
       const filtered = rawData.filter(item => {
         const matchesSection = item.section === currentSection;
         const matchesCategory = currentCategory === "All" || item.category === currentCategory;
-        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const query = searchQuery.toLowerCase().trim();
+        const matchesSearch = query === "" || 
+                              item.name.toLowerCase().includes(query) || 
+                              item.category.toLowerCase().includes(query);
         return matchesSection && matchesCategory && matchesSearch;
       });
 
@@ -445,7 +167,7 @@
         <div class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-sm flex justify-between items-center hover:border-gray-200 transition">
           <div class="pr-3">
             <h3 class="text-sm font-semibold text-gray-900">${item.name}</h3>
-            <span class="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md inline-block mt-1">
+            <span class="text-[10px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md inline-block mt-1">
               ${item.category}
             </span>
           </div>
@@ -456,13 +178,12 @@
       `).join('');
     }
 
-    // Search Listener
     document.getElementById("searchInput").addEventListener("input", (e) => {
       searchQuery = e.target.value;
       renderMenu();
     });
 
-    // Initial Load
+    // Initialize
     renderCategories();
     renderMenu();
   </script>
